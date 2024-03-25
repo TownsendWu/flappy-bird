@@ -1,0 +1,29 @@
+html,body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h3 {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+h4 {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
+.main canvas {
+    outline: none;
+}
+
