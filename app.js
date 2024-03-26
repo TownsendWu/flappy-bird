@@ -83,7 +83,6 @@ export class App {
       //如果得分了
       if (!this.gameover && scoreOrNot) {
         this.score += 1;
-        this.maxScore = Math.max(this.score, this.maxScore);
       }
 
       return;
@@ -98,7 +97,8 @@ export class App {
       this.#drawGameover();
 
       //如果分数大于最高分，则更新最高分
-      if (this.score >= this.maxScore) {
+      if (this.score > this.maxScore) {
+        this.maxScore = Math.max(this.score, this.maxScore);
         localStorage.setItem("flappy:maxScore", this.maxScore.toString());
         updateScore();
       }
