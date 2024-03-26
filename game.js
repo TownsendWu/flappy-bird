@@ -36,7 +36,13 @@ export class Game {
   }
 }
 
-updateScore()
+updateScore();
 
-const game = new Game();
-game.run();
+new Game()
+  .run()
+  .then(() => {
+    console.log("游戏加载完成");
+  })
+  .catch((e) => {
+    console.error("游戏加载失败", e);
+  });

@@ -1,4 +1,4 @@
-import { randomRange } from "./utils/random-util.js";
+import { randomRange } from "../utils/random-util.js";
 
 export class Pipe {
   constructor(windwoWidth, windowHeight, gameObjects, sound, dx = 310) {
@@ -129,7 +129,7 @@ export class Pipe {
 
     if (scoreOrNot) {
       this.sound.pointOgg.play();
-      console.log(distance, birdX, this.dx, this.pipeImg.width);
+      // console.log(distance, birdX, this.dx, this.pipeImg.width);
     }
     return scoreOrNot;
   }

@@ -1,7 +1,7 @@
-import { GameBackground } from "./js/background.js";
 import { GameCanvas } from "./js/game-canvas.js";
-import { Player } from "./js/player.js";
-import { Pipe } from "./js/pipe.js";
+import { GameBackground } from "./js/entity/background.js";
+import { Player } from "./js/entity/player.js";
+import { Pipe } from "./js/entity/pipe.js";
 import { updateScore } from "./js/utils/update-maxscore-util.js";
 
 export class App {
@@ -58,7 +58,6 @@ export class App {
     //初始游戏状态
     this.isStart = false;
     this.gameover = false;
-    this.isCollision = false;
     this.score = 0;
     this.maxScore = Number(localStorage.getItem("flappy:maxScore")) || 0;
   }
@@ -72,13 +71,16 @@ export class App {
       this.#drawPipeGroup();
       this.#drawScore();
 
+      //判断是否碰撞，碰撞则游戏结束
       this.gameover =
         this.pipe1.collision(this.player.dx, this.player.dy) ||
         this.pipe2.collision(this.player.dx, this.player.dy);
+      //判断是否得分
       const scoreOrNot =
         this.pipe1.calcSocre(this.player.dx, this.player.dy) ||
         this.pipe2.calcSocre(this.player.dx, this.player.dy);
-      // console.log(scoreOrNot);
+      
+      //如果得分了
       if (!this.gameover && scoreOrNot) {
         this.score += 1;
         this.maxScore = Math.max(this.score, this.maxScore);
@@ -86,7 +88,7 @@ export class App {
 
       return;
     }
-
+    //如果游戏结束
     if (this.gameover) {
       this.#drawBackground();
       this.#drawBase();
@@ -94,6 +96,8 @@ export class App {
       this.#drawPipeGroup();
       this.#drawScore();
       this.#drawGameover();
+
+      //如果分数大于最高分，则更新最高分
       if (this.score >= this.maxScore) {
         localStorage.setItem("flappy:maxScore", this.maxScore.toString());
         updateScore();
@@ -101,6 +105,7 @@ export class App {
       return;
     }
 
+    //游戏未开始
     this.#drawBackground();
     this.#drawBase();
     this.#drawMessage();

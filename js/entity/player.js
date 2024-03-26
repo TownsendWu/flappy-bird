@@ -1,4 +1,4 @@
-import { Physics } from "./physics.js";
+import { Physics } from "../utils/physics-util.js";
 
 export class Player {
   constructor(windwoWidth, windowHeight, gameObjects, sound) {

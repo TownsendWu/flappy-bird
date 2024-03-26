@@ -4,8 +4,7 @@
 
 export class Physics {
   constructor() {
-    this.g = 0.25 ;
-    this.fps = 60;
+    this.g = 0.25 ; // 重力加速度
   }
 
   /**

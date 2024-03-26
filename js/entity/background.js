@@ -12,7 +12,10 @@ export class GameBackground {
     this.windowHeight = windowHeight;
 
     //地面复位最大长度
-    this.baseMaxWidth = this.baseImg.width - this.windwoWidth;
+
+    this.baseMaxWidth = this.baseImg.width
+      ? this.baseImg.width - this.windwoWidth
+      : 336 - this.windwoWidth;
     this.baseOffsetX = 0;
     //地面滚动速度
     this.baseSpeed = 2.2;
@@ -25,7 +28,7 @@ export class GameBackground {
 
     //分数坐标
     this.scoreDx = this.windwoWidth - 24 - 5;
-    console.log("初始分数坐标",this.scoreDx);
+    console.log("初始分数坐标", this.scoreDx);
     this.scoreDy = 10;
 
     //游戏结束坐标
@@ -113,6 +116,6 @@ export class GameBackground {
       cnt += 1;
     }
 
-    return results
+    return results;
   }
 }
