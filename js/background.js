@@ -30,7 +30,7 @@ export class GameBackground {
 
     //游戏结束坐标
     this.gameoverDx = 50;
-    this.gameoverDy = this.windowHeight * 0.4;
+    this.gameoverDy = this.windowHeight * 0.3;
   }
 
   get background() {

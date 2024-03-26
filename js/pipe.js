@@ -21,11 +21,26 @@ export class Pipe {
     this.baseHeight = this.windowHeight * 0.8;
 
     this.dx = 310;
-    this.speed = 1;
+    this.speed = 1.8;
     this.dy = randomRange(150, 350);
   }
 
-  update() {
+  update(gameover = false) {
+    if (gameover) {
+      this.speed = 0;
+      return {
+        img: this.pipeImg,
+        sx: 0,
+        sy: 0,
+        sWidth: this.pipeImg.width,
+        sHeight: this.baseHeight - this.dy,
+        dx: this.dx,
+        dy: this.dy,
+        dWidth: this.pipeImg.width,
+        dHeight: this.baseHeight - this.dy,
+      };
+    }
+
     this.dx -= this.speed;
     if (this.dx < -100) {
       this.dx = 310;
@@ -47,7 +62,7 @@ export class Pipe {
 
   reset() {
     this.dx = 310;
-    this.speed = 1;
+    this.speed = 1.8;
     this.dy = randomRange(150, 350);
   }
 
@@ -76,9 +91,7 @@ export class Pipe {
   calcSocre(birdX, birdY) {
     const distance = birdX - this.dx - this.pipeImg.width;
     const scoreOrNot =
-      birdY + this.birdHeight < this.baseHeight &&
-      distance > 2  &&
-      distance < 4 ;
+      birdY + this.birdHeight < this.baseHeight && distance > 2 && distance < 4;
 
     if (scoreOrNot) {
       this.sound.pointOgg.play();

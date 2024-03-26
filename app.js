@@ -78,18 +78,20 @@ export class App {
     if (this.gameover) {
       this.#drawBackground();
       this.#drawBase();
-      this.#deawGameover();
+      this.#drawPlayerFlap();
+      this.#drawPipe();
       this.#drawScore();
+      this.#drawGameover();
       if (this.score >= this.maxScore) {
-        localStorage.setItem("flappy:maxScore", this.maxScore.toString())
-        updateScore()
+        localStorage.setItem("flappy:maxScore", this.maxScore.toString());
+        updateScore();
       }
       return;
     }
 
     this.#drawBackground();
     this.#drawBase();
-    this.#deawMessage();
+    this.#drawMessage();
   }
 
   #resetStatus() {
@@ -112,18 +114,18 @@ export class App {
     this.ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
   }
 
-  #deawMessage() {
+  #drawMessage() {
     const { img, dx, dy } = this.gameBackGround.menu;
     this.ctx.drawImage(img, dx, dy);
   }
 
-  #deawGameover() {
+  #drawGameover() {
     const { img, dx, dy } = this.gameBackGround.gameover;
     this.ctx.drawImage(img, dx, dy);
   }
 
   #drawPlayerFlap() {
-    const { img, dx, dy, rotation } = this.player.update();
+    const { img, dx, dy, rotation } = this.player.update(this.gameover);
     // this.ctx.save();
 
     // this.ctx.translate(this.player.dX, this.player.dY);
@@ -143,7 +145,7 @@ export class App {
 
   #drawPipe() {
     const { img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight } =
-      this.pipe.update();
+      this.pipe.update(this.gameover);
     this.ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
   }
 
@@ -158,7 +160,6 @@ export class App {
           this.isStart = true;
           this.player.jump();
         }
-
       } else if (e.code === "KeyR") {
         this.#resetStatus();
       }

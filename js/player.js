@@ -36,7 +36,15 @@ export class Player {
     this.flapSpeed = 0.2;
   }
 
-  update() {
+  update(gameover = false) {
+    if (gameover) {
+      return {
+        img: this.birds[0],
+        dx: this.dx,
+        dy: this.dy,
+        rotation: this.rotation,
+      };
+    }
     const i = Math.round(this.flyStatus) % 3;
     const img = this.birds[i];
     this.rotation = Math.atan2(this.velocityY, 6);
@@ -76,6 +84,6 @@ export class Player {
 
   jump() {
     this.velocityY = this.jumpSpeed;
-    this.sound.wingOgg.play()
+    this.sound.wingOgg.play();
   }
 }
