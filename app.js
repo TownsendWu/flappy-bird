@@ -40,11 +40,19 @@ export class App {
     );
 
     //管道障碍物
-    this.pipe = new Pipe(
+    this.pipe1 = new Pipe(
       this.windowWidth,
       this.windowHeight,
       this.gameObject,
       this.sound
+    );
+
+    this.pipe2 = new Pipe(
+      this.windowWidth,
+      this.windowHeight,
+      this.gameObject,
+      this.sound,
+      this.pipe1.initDx + 200
     );
 
     //初始游戏状态
@@ -61,11 +69,15 @@ export class App {
       this.#drawBackground();
       this.#drawBase();
       this.#drawPlayerFlap();
-      this.#drawPipe();
+      this.#drawPipeGroup();
       this.#drawScore();
 
-      this.gameover = this.pipe.collision(this.player.dx, this.player.dy);
-      const scoreOrNot = this.pipe.calcSocre(this.player.dx, this.player.dy);
+      this.gameover =
+        this.pipe1.collision(this.player.dx, this.player.dy) ||
+        this.pipe2.collision(this.player.dx, this.player.dy);
+      const scoreOrNot =
+        this.pipe1.calcSocre(this.player.dx, this.player.dy) ||
+        this.pipe2.calcSocre(this.player.dx, this.player.dy);
       // console.log(scoreOrNot);
       if (!this.gameover && scoreOrNot) {
         this.score += 1;
@@ -79,7 +91,7 @@ export class App {
       this.#drawBackground();
       this.#drawBase();
       this.#drawPlayerFlap();
-      this.#drawPipe();
+      this.#drawPipeGroup();
       this.#drawScore();
       this.#drawGameover();
       if (this.score >= this.maxScore) {
@@ -96,10 +108,15 @@ export class App {
 
   #resetStatus() {
     this.player.reset();
-    this.pipe.reset();
+    this.pipe1.reset();
+    this.pipe2.reset();
     this.isStart = false;
     this.gameover = false;
     this.score = 0;
+  }
+  #drawPipeGroup() {
+    this.#drawPipe(1);
+    this.#drawPipe(2);
   }
 
   #drawBackground() {
@@ -143,10 +160,47 @@ export class App {
     }
   }
 
-  #drawPipe() {
-    const { img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight } =
-      this.pipe.update(this.gameover);
-    this.ctx.drawImage(img, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+  #drawPipe(vlaue) {
+    const pipes =
+      vlaue == 1
+        ? this.pipe1.update(this.gameover)
+        : this.pipe2.update(this.gameover);
+    const downPipe = pipes[0];
+    this.ctx.drawImage(
+      downPipe.img,
+      downPipe.sx,
+      downPipe.sy,
+      downPipe.sWidth,
+      downPipe.sHeight,
+      downPipe.dx,
+      downPipe.dy,
+      downPipe.dWidth,
+      downPipe.dHeight
+    );
+    this.ctx.save();
+
+    const topPipe = pipes[1];
+    // 将画布原点移动到上面管道的中心
+    this.ctx.translate(
+      topPipe.dx + topPipe.dWidth / 2,
+      topPipe.dy + topPipe.dHeight / 2
+    );
+
+    this.ctx.rotate(Math.PI);
+
+    this.ctx.drawImage(
+      topPipe.img,
+      topPipe.sx,
+      topPipe.sy,
+      topPipe.sWidth,
+      topPipe.sHeight,
+      -topPipe.dWidth / 2,
+      -topPipe.dHeight / 2,
+      topPipe.dWidth,
+      topPipe.dHeight
+    );
+
+    this.ctx.restore();
   }
 
   #initEvent() {

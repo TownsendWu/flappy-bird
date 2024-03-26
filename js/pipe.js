@@ -1,7 +1,7 @@
 import { randomRange } from "./utils/random-util.js";
 
 export class Pipe {
-  constructor(windwoWidth, windowHeight, gameObjects, sound) {
+  constructor(windwoWidth, windowHeight, gameObjects, sound, dx = 310) {
     this.windwoWidth = windwoWidth;
     this.windowHeight = windowHeight;
     this.pipeImg = gameObjects.pipe;
@@ -11,16 +11,13 @@ export class Pipe {
     this.birdWidth = 33;
     this.birdHeight = 25;
 
-    //上下两个管道之间的距离
-    this.pipeGap = 50;
-
-    //两个管道之间的距离
-    this.basePipeGap = 200;
+    //上下两个管道之间的空隙
+    this.pipeSpace = 85;
 
     //地面高度
     this.baseHeight = this.windowHeight * 0.8;
-
-    this.dx = 310;
+    this.initDx = dx;
+    this.dx = dx;
     this.speed = 1.8;
     this.dy = randomRange(150, 350);
   }
@@ -28,7 +25,39 @@ export class Pipe {
   update(gameover = false) {
     if (gameover) {
       this.speed = 0;
-      return {
+      return [
+        {
+          img: this.pipeImg,
+          sx: 0,
+          sy: 0,
+          sWidth: this.pipeImg.width,
+          sHeight: this.baseHeight - this.dy,
+          dx: this.dx,
+          dy: this.dy,
+          dWidth: this.pipeImg.width,
+          dHeight: this.baseHeight - this.dy,
+        },
+        {
+          img: this.pipeImg,
+          sx: 0,
+          sy: 0,
+          sWidth: this.pipeImg.width,
+          sHeight: this.dy - this.pipeSpace,
+          dx: this.dx,
+          dy: 0,
+          dWidth: this.pipeImg.width,
+          dHeight: this.dy - this.pipeSpace,
+        },
+      ];
+    }
+
+    this.dx -= this.speed;
+    if (this.dx < -100) {
+      this.dx = 310;
+      this.dy = randomRange(150, 350);
+    }
+    return [
+      {
         img: this.pipeImg,
         sx: 0,
         sy: 0,
@@ -38,30 +67,23 @@ export class Pipe {
         dy: this.dy,
         dWidth: this.pipeImg.width,
         dHeight: this.baseHeight - this.dy,
-      };
-    }
-
-    this.dx -= this.speed;
-    if (this.dx < -100) {
-      this.dx = 310;
-      this.dy = randomRange(150, 350);
-      console.log(this.dx, this.dy);
-    }
-    return {
-      img: this.pipeImg,
-      sx: 0,
-      sy: 0,
-      sWidth: this.pipeImg.width,
-      sHeight: this.baseHeight - this.dy,
-      dx: this.dx,
-      dy: this.dy,
-      dWidth: this.pipeImg.width,
-      dHeight: this.baseHeight - this.dy,
-    };
+      },
+      {
+        img: this.pipeImg,
+        sx: 0,
+        sy: 0,
+        sWidth: this.pipeImg.width,
+        sHeight: this.dy - this.pipeSpace,
+        dx: this.dx,
+        dy: 0,
+        dWidth: this.pipeImg.width,
+        dHeight: this.dy - this.pipeSpace,
+      },
+    ];
   }
 
   reset() {
-    this.dx = 310;
+    this.dx = this.initDx;
     this.speed = 1.8;
     this.dy = randomRange(150, 350);
   }
@@ -74,11 +96,23 @@ export class Pipe {
       return true;
     }
 
-    //检测是否碰到水管
+    //检测是否碰到下管道
     if (
       birdX + this.birdWidth >= this.dx &&
       birdX - 1 <= this.dx + this.pipeImg.width &&
       birdY + this.birdHeight >= this.dy
+    ) {
+      this.sound.hitOgg.play();
+      this.sound.dieOgg.play();
+      return true;
+    }
+
+    //检测是否碰到上管道
+    // 检测是否碰到上管道
+    if (
+      birdX + this.birdWidth >= this.dx &&
+      birdX <= this.dx + this.pipeImg.width &&
+      birdY <= this.dy - this.pipeSpace
     ) {
       this.sound.hitOgg.play();
       this.sound.dieOgg.play();
@@ -98,9 +132,5 @@ export class Pipe {
       console.log(distance, birdX, this.dx, this.pipeImg.width);
     }
     return scoreOrNot;
-  }
-
-  #calcHeight(dy) {
-    return this.baseHeight - dy;
   }
 }
