@@ -16,6 +16,17 @@ h4 {
     margin-top: 20px;
 }
 
+@media screen and (max-width: 768px) {
+    h3 {
+        font-size: 20px;
+    }
+
+    h4 {
+        font-size: 20px;
+    }
+}
+
+
 .main {
     display: flex;
     justify-content: center;
