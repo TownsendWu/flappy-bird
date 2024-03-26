@@ -56,7 +56,7 @@ export class App {
   }
 
   run() {
-    // this.ctx.clearRect(0, 0, this.windowWidth, this.windowHeight);
+    this.ctx.clearRect(0, 0, this.windowWidth, this.windowHeight);
     if (this.isStart && !this.gameover) {
       this.#drawBackground();
       this.#drawBase();
@@ -80,8 +80,10 @@ export class App {
       this.#drawBase();
       this.#deawGameover();
       this.#drawScore(); 
-      localStorage.setItem("flappy:maxScore",this.maxScore.toString())
-      updateScore()
+      if (this.score >= this.maxScore) {
+        localStorage.setItem("flappy:maxScore",this.maxScore.toString())
+        updateScore()
+      }
       return;
     }
 
