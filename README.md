@@ -1,11 +1,11 @@
 ```
 ----flappy-bird\
-|----assets\ 游戏资源
+    |----assets\ 游戏资源
     |----js\
     |    |----background.js 游戏背景图，ui等
     |    |----game-canvas.js 获取canvas
     |    |----physics.js 简单的物理引擎，控制小鸟重力加速度
-    |    |----pipe.js 管道
+    |    |----pipe.js 管道 TODO: 完善障碍物逻辑
     |    |----player.js 玩家(小鸟)
     |    |----resources-loader.js 资源加载器
     |    |----resources.js 资源实体类
