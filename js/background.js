@@ -18,14 +18,14 @@ export class GameBackground {
     this.baseSpeed = 2.2;
     //地面高度
     this.baseHeight = this.windowHeight * 0.8;
-    console.log(this.baseHeight);
 
     //菜单坐标
     this.menuDx = 50;
     this.menuDy = 50;
 
     //分数坐标
-    this.scoreDx = this.windwoWidth - this.numberImgs[0].width - 5;
+    this.scoreDx = this.windwoWidth - 24 - 5;
+    console.log("初始分数坐标",this.scoreDx);
     this.scoreDy = 10;
 
     //游戏结束坐标

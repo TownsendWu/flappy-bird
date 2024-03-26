@@ -79,9 +79,9 @@ export class App {
       this.#drawBackground();
       this.#drawBase();
       this.#deawGameover();
-      this.#drawScore(); 
+      this.#drawScore();
       if (this.score >= this.maxScore) {
-        localStorage.setItem("flappy:maxScore",this.maxScore.toString())
+        localStorage.setItem("flappy:maxScore", this.maxScore.toString())
         updateScore()
       }
       return;
@@ -151,8 +151,14 @@ export class App {
     document.addEventListener("keydown", (e) => {
       // console.log(e);
       if (e.code === "Space") {
-        this.isStart = true;
-        this.player.jump();
+        //如果当前是游戏结束状态，则再次按下空格 就重开游戏
+        if (this.gameover) {
+          this.#resetStatus();
+        } else {
+          this.isStart = true;
+          this.player.jump();
+        }
+
       } else if (e.code === "KeyR") {
         this.#resetStatus();
       }
@@ -160,8 +166,12 @@ export class App {
 
     document.addEventListener("click", (e) => {
       if (e.isTrusted) {
-        this.isStart = true;
-        this.player.jump();
+        if (this.gameover) {
+          this.#resetStatus();
+        } else {
+          this.isStart = true;
+          this.player.jump();
+        }
       }
     });
   }
